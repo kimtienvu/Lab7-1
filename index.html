@@ -99,7 +99,7 @@
           let data = await response.json();
           document.getElementById("output").innerHTML = JSON.stringify(data);
         } catch (error) {
-          document.getElementById("output").innerHTML = response.statusText + " " + response.status;
+          document.getElementById("output").innerHTML = error;
         }
       }
 
@@ -125,7 +125,7 @@
           let data = await response.json();
           document.getElementById("output").innerHTML = JSON.stringify(data);
         } catch (error) {
-          document.getElementById("output").innerHTML = response.statusText + " " + response.status;
+          document.getElementById("output").innerHTML = error;
         }
       }
 
@@ -164,7 +164,7 @@
             let data = await response.json();
             document.getElementById("output").innerHTML = JSON.stringify(data);
           } catch (error) {
-            document.getElementById("output").innerHTML = response.statusText + " " + response.status;
+            document.getElementById("output").innerHTML = error;
           } 
         }
       }
@@ -201,7 +201,7 @@
             let data = await response.json();
             document.getElementById("output").innerHTML = JSON.stringify(data);
           } catch (error) {
-            document.getElementById("output").innerHTML = response.statusText + " " + response.status;
+            document.getElementById("output").innerHTML = error;
           } 
         }
       }
@@ -217,6 +217,11 @@
           document.getElementById("recordForm").style.display = 'none';
           document.getElementById("recordIDcontainer").style.display = 'none';
           let input_sign = window.prompt('Enter Record ID');
+          
+          if(input_sign === null) {
+            output.innerHTML = "Please input a valid ID";
+            return;
+          }
         
           let fetchAllURL = document.getElementById("endpoint").value;
           fetchAllURL += "/" + input_sign;
@@ -232,7 +237,7 @@
           let data = await response.json();
           document.getElementById("output").innerHTML = JSON.stringify(data);
         } catch (error) {
-          document.getElementById("output").innerHTML = response.statusText + " " + response.status;
+          document.getElementById("output").innerHTML = error;
         }
       }
 
