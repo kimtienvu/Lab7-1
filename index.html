@@ -67,7 +67,7 @@
       </div>
 
       <div>
-        <button type="submit">Execute</button>
+        <button id="execute" type="submit">Execute</button>
       </div>
     </form>
 
@@ -83,24 +83,91 @@
       // From the 4 CRUD actions, this is the READ action, and uses the GET http method.
       // The main difference from fetchOne() will be the URL you request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
-      function fetchAll() {
-        // TODO
+      async function fetchAll() {
+        
+        try {
+          document.getElementById("recordForm").style.display = 'none';
+          let fetchAllURL = document.getElementById("endpoint").value;
+          let response = await fetch(fetchAllURL, {mode: 'cors'});
+          
+          if( !(response.status >= 200 && response.status < 300)) {
+            document.getElementById("output").innerHTML = "There has been an error: " + response.statusText;
+            return Promise.reject(new Error(response.statusText))
+          }
+          
+          let data = await response.json();
+          document.getElementById("output").innerHTML = JSON.stringify(data);
+        } catch (error) {
+          document.getElementById("output").innerHTML = "There has been an error: " + error;
+        }
       }
 
       // This function should fetch one entry from the given endpoint.
       // From the 4 CRUD actions, this is the READ action, and uses the GET http method.
       // The main difference from fetchAll() will be the URL you request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
-      function fetchOne() {
-        // TODO
+      async function fetchOne() {
+      
+        try {
+          document.getElementById("recordForm").style.display = 'none';
+          let input_sign = window.prompt('Enter Record ID');
+        
+          let fetchAllURL = document.getElementById("endpoint").value;
+          fetchAllURL += "/" + input_sign;
+          let response = await fetch(fetchAllURL, {mode: 'cors'});
+          if( !(response.status >= 200 && response.status < 300)) {
+            document.getElementById("output").innerHTML = "There has been an error: " + response.statusText;
+            return Promise.reject(new Error(response.statusText))
+          }
+          
+          let data = await response.json();
+          document.getElementById("output").innerHTML = JSON.stringify(data);
+        } catch (error) {
+          document.getElementById("output").innerHTML = "There has been an error: " + error;
+        }
       }
 
       // This function should use fetch to create one entry in the given endpoint.
       // From the 4 CRUD actions, this is the CREATE action, and uses the POST http method.
       // The main difference from updateRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function createRecord() {
-        // TODO
+      async function createRecord(press) {
+      
+        if (press === 'show') {
+          document.getElementById("recordForm").style.display = 'block';
+        }
+        
+        if (press === 'submit') {
+          let author_name = document.getElementById("author").value;
+          let title_name = document.getElementById("title").value;
+          console.log(author_name);
+          console.log(title_name);
+          
+          try {
+
+            let fetchAllURL = document.getElementById("endpoint").value;
+            let jsonObject = await fetch(fetchAllURL);
+            let stringObject = await jsonObject.json();
+            let count = stringObject.length;
+            let new_id = count + 1;
+            console.log(new_id);
+            
+            let temp_body = {author: author_name, title: title_name, id: new_id};
+            console.log(temp_body);
+            let response = await fetch(fetchAllURL, {
+            method: 'post',
+            headers: {
+              "Content-type":"application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({author: author_name, title: title_name, id: new_id}),
+            mode: 'cors'});
+
+            let data = await response.json();
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+          } catch (error) {
+            document.getElementById("output").innerHTML = "There has been an error: " + error;
+          } 
+        }
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
@@ -121,7 +188,7 @@
       }
 
       window.addEventListener('DOMContentLoaded', () => {
-        // Action Form Event Listener
+        // Action Form Event Listener --> create request button
         document
           .getElementById("actionForm")
           .addEventListener("submit", event => {
@@ -149,7 +216,8 @@
             }
           });
 
-        // Record Form Event Listener
+
+        // Record Form Event Listener --> execute button
         document
           .getElementById("recordForm")
           .addEventListener("submit", event => {
