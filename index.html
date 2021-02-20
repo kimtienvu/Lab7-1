@@ -144,23 +144,23 @@
           let title_name = document.getElementById("title").value;
           
           try {
-
             let fetchAllURL = document.getElementById("endpoint").value;
-            let jsonObject = await fetch(fetchAllURL);
-            let stringObject = await jsonObject.json();
-            let count = stringObject.length;
-            let new_id = count + 1;
+            console.log(fetchAllURL);
+            //let jsonObject = await fetch(fetchAllURL);
+            //let stringObject = await jsonObject.json();
+            //let count = stringObject.length;
+            //let new_id = count + 1;
+            //console.log(new_id);
             
-            let temp_body = {author: author_name, title: title_name, id: new_id};
+            let temp_body = {author: author_name, title: title_name};
             console.log(temp_body);
             let response = await fetch(fetchAllURL, {
-            method: 'post',
+            method: 'POST',
             headers: {
               "Content-type":"application/json; charset=UTF-8"
             },
-            body: JSON.stringify({author: author_name, title: title_name, id: new_id}),
+            body: JSON.stringify(temp_body),
             mode: 'cors'});
-
             let data = await response.json();
             document.getElementById("output").innerHTML = JSON.stringify(data);
           } catch (error) {
