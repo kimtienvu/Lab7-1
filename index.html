@@ -197,6 +197,11 @@
             },
             body: JSON.stringify({author: author_name, title: title_name, id: record_name}),
             mode: 'cors'});
+            
+            if( !(response.status >= 200 && response.status < 300)) {
+            document.getElementById("output").innerHTML = response.statusText + " " + response.status;
+            return Promise.reject(new Error(response.statusText))
+          }
 
             let data = await response.json();
             document.getElementById("output").innerHTML = JSON.stringify(data);
